@@ -1,19 +1,24 @@
-import normalize from 'normalize.css';
-import styles from 'styles/App.css';
+import 'normalize.css';
+import 'styles/App.css';
+import Map from './Map';
 
 import React from 'react';
 
 class AppComponent extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      query: 'чы',
+      lang: 'bel'
+    }
+  }
   render() {
     return (
       <div>
-        Test
+        <Map data={this.props.data} suffix={[this.state.query]} />
       </div>
     );
   }
 }
-
-AppComponent.defaultProps = {
-};
 
 export default AppComponent;
