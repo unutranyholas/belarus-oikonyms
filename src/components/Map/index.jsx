@@ -1,70 +1,94 @@
 import React from 'react';
 import d3_scale from 'd3-scale';
+import _ from 'lodash';
 const colorScale = d3_scale.viridis();
 import './Map.css';
 
 
 export default class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      info: ''
+    }
+    this.clearInfo = this.clearInfo.bind(this);
+    this.changeInfo = _.debounce(this.changeInfo.bind(this), 100);
+  }
+  queryToRegexp(query) {
+    //const cleanedQuery = query.replace(/-/g, '');
+    //if (query[0] === '-' && query.slice(-1) === '-') {return new RegExp(`.${cleanedQuery}.`, 'i')}
+    //if (query.slice(-1) === '-') {return new RegExp(`^${cleanedQuery}`, 'i')}
+    //if (query[0] === '-') {return new RegExp(`${cleanedQuery}$`, 'i')}
+    //
+    //return new RegExp(`${cleanedQuery}`, 'i');
+
+    const result = query.split('/').map(q => {
+      const cleaned = q.replace(/-/g, '');
+      if (q[0] === '-' && q.slice(-1) === '-') {return `.${cleaned}.`}
+      else if (q.slice(-1) === '-') {return `^${cleaned}`}
+      else if (q[0] === '-') {return `${cleaned}$`}
+      else {return cleaned}
+    }).join('|');
+
+    return new RegExp(result, 'i');
+  }
+  clearInfo() {
+    this.setState({
+      info: ''
+    })
+  }
+  changeInfo(e) {
+    this.setState({
+      info: e.target.getAttribute('title')
+    })
+  }
   render() {
+    const {data, lang, query, path} = this.props;
+    const myRegexp = this.queryToRegexp(query);
 
-    // percentage of suffix ocurring in each bin
     let percentages = {};
-
     let placenames = {};
-
-    // max percentage (for defining the color scale)
     let maxPercent = 0;
-    // total number of places with suffix
     let totalCount = 0;
 
-    this.props.data.forEach((x)=>{
-      // for each bin
+    data.forEach((x)=>{
 
-      const myRegexp = new RegExp(this.props.suffix.join('$|') + '$', 'i');
-
-      // count matches with suffix
-      let hits = x.filter((y)=> y.label.match(myRegexp));
+      let hits = x.filter((y)=> y[lang].match(myRegexp));
       let count = hits.length;
 
       totalCount += count;
       percentages[x.id] = count/x.length;
 
-      placenames[x.id] = `${percentages[x.id].toFixed(3)}% of place names have suffix \'${this.props.suffix[0]}\' or variations: ${hits.map((y)=> y.label).join(", ")}`;
+      placenames[x.id] = `${(percentages[x.id] * 100).toFixed(0)}% of place names have suffix \'${this.props.query}\': ${hits.map((y)=> y[lang]).join(", ")}`;
+
       // count only bins with at least 20 villages or towns for color scale maximum
-      if(x.length>20) {
+      if(x.length > 20) {
         maxPercent = Math.max(maxPercent, percentages[x.id]);
       }
     });
 
-    colorScale.domain([maxPercent, 0])
+    colorScale.domain([maxPercent, 0]);
 
-    let dots = this.props.data.map((x)=>{
-      // one dot per bin
-      let col = colorScale(percentages[x.id]);
-      if(percentages[x.id]>0){
-        return <circle key={x.id} cx={x.x} cy={x.y} r="5" style={{"fill": col}}>
-          <title>{placenames[x.id]}</title>
-        </circle>;
-      } else {
-        return <circle key={x.id} cx={x.x} cy={x.y} r="5" style={{"fill": col}}></circle>;
-      }
-
+    const dots = data.map((x)=>{
+      const color = colorScale(percentages[x.id]);
+      const title = (percentages[x.id] > 0) ? placenames[x.id] : null;
+      return (
+        <g key={x.id}>
+          <path d={path} transform={`translate(${x.x}, ${x.y})`} style={{fill: color}} onMouseEnter={this.changeInfo} title={title} />
+        </g>
+      )
     });
-
-    let mainLabel = this.props.suffix[0];
-    let variations = this.props.suffix.slice(1).map((x)=>`-${x}`).join(", ");
 
     return (
       <div className="map-tile">
-        <h2>-{mainLabel}</h2>
-        <h4>{variations}</h4>
-        <h3>{totalCount} places</h3>
+        <div className="info">{this.state.info}</div>
         <svg width="600" height="600">
-          {dots}
+          <g>
+            {dots}
+          </g>
         </svg>
       </div>
     );
   }
 }
-
 export default Map;

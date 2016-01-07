@@ -21,10 +21,11 @@ const hexbin = d3_hexbin.hexbin()
   .size([600, 600])
   .radius(6);
 
+const path = hexbin.hexagon();
+
 d3_request.csv(oikonyms, (data) => {
 
   const result = data.map(d => {
-    d.label = d.Bel;
     [d.x, d.y] = projection([+d.Longitude, +d.Latitude]);
     return d
   });
@@ -34,6 +35,6 @@ d3_request.csv(oikonyms, (data) => {
     return d;
   });
 
-  ReactDOM.render(<App data={hbData} />, document.getElementById('app'));
+  ReactDOM.render(<App data={hbData} path={path} />, document.getElementById('app'));
 
 });
