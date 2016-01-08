@@ -15,14 +15,19 @@
     padding: 4px 16px 4px 8px;
 
     &:hover {
-      background-color: #FDE725;
+      //background-color: #FDE725;
+      cursor: default;
+    }
+
+    a:hover {
+      cursor: default;
     }
 
     &.selected {
       background-color: #FFF599;
 
       &:hover {
-        background-color: #FFF599;
+        //background-color: #FFF599;
       }
 
       a {

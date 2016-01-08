@@ -35,7 +35,7 @@ class AppComponent extends React.Component {
       query: this.props.examples[lang][0]
     });
   }
-
+  // <li className={(this.state.lang === 'Eng') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Eng"><img src={lang_eng} alt="Герб Англіі" height="24" />Eng</a></li>
   render() {
     return (
       <div className="wrapper">
@@ -46,7 +46,7 @@ class AppComponent extends React.Component {
           <div className="1/4 grid__cell">
             <ul className="lang">
               <li className={(this.state.lang === 'Bel') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Bel"><img src={lang_bel} alt="Герб Беларусі" height="24" />Бел</a></li>
-              <li className={(this.state.lang === 'Eng') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Eng"><img src={lang_eng} alt="Герб Англіі" height="24" />Eng</a></li>
+              <li style={{opacity: 0.2}}><a data-lang="Eng" title="Coming soon..."><img src={lang_eng} alt="Герб Англіі" height="24" />Eng</a></li>
             </ul>
           </div>
         </header>
