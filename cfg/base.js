@@ -2,6 +2,10 @@ var path = require('path');
 var port = 8000;
 var srcPath = path.join(__dirname, '/../src');
 var publicPath = '/assets/';
+
+var autoprefixer = require('autoprefixer');
+var magician = require('postcss-font-magician');
+
 module.exports = {
   port: port,
   debug: true,
@@ -67,6 +71,6 @@ module.exports = {
     ]
   },
   postcss: function () {
-    return [];
+    return [autoprefixer, magician];
   }
 };

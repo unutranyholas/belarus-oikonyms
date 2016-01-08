@@ -14,7 +14,7 @@ class AppComponent extends React.Component {
     super(props);
     this.state = {
       query: '-чы',
-      lang: 'Eng'
+      lang: 'Bel'
     };
 
     this.changeQuery = this.changeQuery.bind(this);
@@ -45,7 +45,7 @@ class AppComponent extends React.Component {
           </div>
           <div className="1/4 grid__cell">
             <ul className="lang">
-              <li className={(this.state.lang === 'Bel') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Bel"><img src={lang_bel} alt="Герб Беларусі" height="24" />Bel</a></li>
+              <li className={(this.state.lang === 'Bel') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Bel"><img src={lang_bel} alt="Герб Беларусі" height="24" />Бел</a></li>
               <li className={(this.state.lang === 'Eng') ? 'selected' : null}><a onClick={this.changeLang} data-lang="Eng"><img src={lang_eng} alt="Герб Англіі" height="24" />Eng</a></li>
             </ul>
           </div>
@@ -54,7 +54,7 @@ class AppComponent extends React.Component {
           <div className="3/16 grid__cell">
             <section className="form">
               <h3>Патэрн</h3>
-              <input type="text" onChange={this.changeQuery} value={this.state.query} />
+              <input type="text" onChange={this.changeQuery} value={this.state.query} placeholder="некалькі літар" />
             </section>
             <section className="examples">
               <h3>Напрыклад:</h3>

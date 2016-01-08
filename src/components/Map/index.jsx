@@ -130,7 +130,7 @@ export default class Map extends React.Component {
       } else {
         info = (<div className="info">
             <h2>Няма патэрну, таму вы бачыце агульную статыстыку</h2>
-            <p>Усяго — {totalCount} гарадоў і вёсак.</p>
+            <p>Усяго — {totalCount} населеных пунктаў.</p>
           </div>)
       }
 
