@@ -1,7 +1,0 @@
-{
-  "generator-react-webpack": {
-    "appName": "oikonyms",
-    "style": "scss",
-    "postcss": true
-  }
-}
