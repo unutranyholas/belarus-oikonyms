@@ -1,12 +1,56 @@
+a {
+  text-decoration: none;
+  color: #3a33d1;
+  border-bottom: 1px solid rgba(58, 51, 209, 0.3);
+  cursor: pointer;
+}
+
+body {
+  font: 16px/1.4 'Roboto', sans-serif;
+}
+
+h1 {
+  margin: 0;
+  padding: 60px 0;
+  font-size: 40px;
+  line-height: 1;
+}
+
+h2 {
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+p {
+  margin: 0 0 8px;
+}
+
 .wrapper {
   max-width: 1280px;
-  padding: 0 20px;
+  padding: 0 40px;
   margin: 0 auto;
 }
 
 .lang {
   float: right;
-  margin: 8px 0;
+  margin: 4px 0;
   padding: 60px 0;
 
   li {
@@ -64,7 +108,7 @@
     background-color: #FFF599;
 
     &::placeholder {
-      color: rgba(0, 0, 0, 0.2)
+      color: rgba(0, 0, 0, 0.2);
     }
 
     &:focus {
@@ -85,12 +129,7 @@
 
 .map {
   position: relative;
-  margin-top: 40px;
-  //left: -50px;
-
-  svg {
-
-  }
+  top: -20px;
 
   h2 strong {
     background-color: #FFF599;
@@ -110,18 +149,10 @@
     line-height: 1;
     margin-bottom: 8px;
   }
-
-  p {
-    margin: 0 0 8px;
-  }
 }
 
 .help {
   margin: 8px 0 48px;
-
-  p {
-    margin: 0 0 8px;
-  }
 
   dl {
     margin: 0;
@@ -151,49 +182,15 @@
   }
 }
 
-footer ul {
-  margin: 8px 0 24px;
-}
+footer.grid {
+  padding-bottom: 40px;
 
-a {
-  text-decoration: none;
-  color: #3a33d1;
-  border-bottom: 1px solid rgba(58, 51, 209, 0.3);
-  cursor: pointer;
-}
+  ul {
+    margin: 8px 0 24px;
+  }
 
-body {
-  font: 16px/1.4 'Roboto', sans-serif;
-}
-
-header {
-
-}
-
-h1 {
-  margin: 0;
-  padding: 60px 0;
-  font-size: 40px;
-}
-
-h2 {
-  margin: 0 0 12px;
-  padding: 0;
-  font-size: 18px;
-}
-
-h3 {
-  font-size: 18px;
-  font-weight: 400;
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  list-style: none;
+  p {
+    font-size: 18px;
+    margin: 0 0 8px;
+  }
 }
