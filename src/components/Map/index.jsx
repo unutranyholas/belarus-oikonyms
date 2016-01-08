@@ -1,7 +1,8 @@
 import React from 'react';
 import d3_scale from 'd3-scale';
 import _ from 'lodash';
-const colorScale = d3_scale.viridis();
+const colorScalePer = d3_scale.viridis();
+const colorScaleCount = d3_scale.viridis();
 import './Map.css';
 
 
@@ -9,19 +10,11 @@ export default class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      info: ''
-    }
-    this.clearInfo = this.clearInfo.bind(this);
-    this.changeInfo = _.debounce(this.changeInfo.bind(this), 100);
+      active: null
+    };
+    this.toggleActive = this.toggleActive.bind(this);
   }
   queryToRegexp(query) {
-    //const cleanedQuery = query.replace(/-/g, '');
-    //if (query[0] === '-' && query.slice(-1) === '-') {return new RegExp(`.${cleanedQuery}.`, 'i')}
-    //if (query.slice(-1) === '-') {return new RegExp(`^${cleanedQuery}`, 'i')}
-    //if (query[0] === '-') {return new RegExp(`${cleanedQuery}$`, 'i')}
-    //
-    //return new RegExp(`${cleanedQuery}`, 'i');
-
     const result = query.split('/').map(q => {
       const cleaned = q.replace(/-/g, '');
       if (q[0] === '-' && q.slice(-1) === '-') {return `.${cleaned}.`}
@@ -32,14 +25,10 @@ export default class Map extends React.Component {
 
     return new RegExp(result, 'i');
   }
-  clearInfo() {
+  toggleActive(e) {
+    const result = (e.target.getAttribute('title') !== this.state.active) ? e.target.getAttribute('title') : null;
     this.setState({
-      info: ''
-    })
-  }
-  changeInfo(e) {
-    this.setState({
-      info: e.target.getAttribute('title')
+      active: result
     })
   }
   render() {
@@ -50,45 +39,115 @@ export default class Map extends React.Component {
     let placenames = {};
     let maxPercent = 0;
     let totalCount = 0;
+    let maxCount = 0;
+    let active, activeRegion, info;
 
     data.forEach((x)=>{
+      if (x.id === this.state.active) {active = x}
 
-      let hits = x.filter((y)=> y[lang].match(myRegexp));
-      let count = hits.length;
+      const hits = x.filter((y)=> y[lang].match(myRegexp));
+      const count = hits.length;
 
       totalCount += count;
       percentages[x.id] = count/x.length;
 
-      placenames[x.id] = `${(percentages[x.id] * 100).toFixed(0)}% of place names have suffix \'${this.props.query}\': ${hits.map((y)=> y[lang]).join(", ")}`;
+      placenames[x.id] = {
+        percentage: (percentages[x.id] * 100).toFixed(0),
+        points: hits.map(y => y[lang])
+      };
 
       // count only bins with at least 20 villages or towns for color scale maximum
       if(x.length > 20) {
         maxPercent = Math.max(maxPercent, percentages[x.id]);
       }
+
+      maxCount = Math.max(maxCount, count);
     });
 
-    colorScale.domain([maxPercent, 0]);
+    colorScalePer.domain([Math.max(maxPercent, 0.01), 0]);
+    colorScaleCount.domain([Math.max(maxCount, 0.01), 0]);
 
     const dots = data.map((x)=>{
-      const color = colorScale(percentages[x.id]);
-      const title = (percentages[x.id] > 0) ? placenames[x.id] : null;
+      const color = (this.props.query.replace(/-/g, '') !== '') ? colorScalePer(percentages[x.id]) : colorScaleCount(placenames[x.id].points.length);
       return (
         <g key={x.id}>
-          <path d={path} transform={`translate(${x.x}, ${x.y})`} style={{fill: color}} onMouseEnter={this.changeInfo} title={title} />
+          <path d={path} transform={`translate(${x.x}, ${x.y})`} style={{fill: color}} onClick={this.toggleActive} title={x.id} />
         </g>
       )
     });
 
+    if (this.props.query.replace(/-/g, '') !== '') {
+
+      if (this.state.active !== null) {
+        activeRegion =
+          (<g className="active">
+            <path d={path} transform={`translate(${active.x}, ${active.y})`} onClick={this.toggleActive}
+                  title={active.id}/>
+            <line x1="0" x2="0" y1="5" y2="600" transform={`translate(${active.x}, ${active.y})`}/>
+          </g>);
+
+        info = (placenames[this.state.active].percentage === '0') ?
+          (<div className="info"><h2>Тут няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong></h2>
+          </div>) :
+          (<div className="info"><h2>Тут {placenames[this.state.active].percentage}% населеных пунктаў утрымліваюць
+            патэрн <strong>{this.props.query}</strong></h2>
+            <ul>
+              {placenames[this.state.active].points.map((p, i) => {
+                return (<li key={i}>{p}</li>)
+              })}
+            </ul>
+          </div>);
+      } else {
+        info = (totalCount === 0) ?
+          (<div className="info"><h2>У Беларусі няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong>
+          </h2></div>) :
+          (<div className="info"><h2>Усяго {(totalCount / this.props.total * 100).toFixed(1)}% населеных пунктаў
+            утрымліваюць патэрн <strong>{this.props.query}</strong></h2>
+            <p>Калі дакладней, то {totalCount} з {this.props.total}.</p>
+          </div>)
+      }
+
+    } else {
+
+      if (this.state.active !== null) {
+        activeRegion =
+          (<g className="active">
+            <path d={path} transform={`translate(${active.x}, ${active.y})`} onClick={this.toggleActive}
+                  title={active.id}/>
+            <line x1="0" x2="0" y1="5" y2="600" transform={`translate(${active.x}, ${active.y})`}/>
+          </g>);
+
+        info = (placenames[this.state.active].percentage === '0') ?
+          (<div className="info"><h2>Тут няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong></h2>
+          </div>) :
+          (<div className="info"><h2>Тут {placenames[this.state.active].points.length} населеных пунктаў</h2>
+            <ul>
+              {placenames[this.state.active].points.map((p, i) => {
+                return (<li key={i}>{p}</li>)
+              })}
+            </ul>
+          </div>);
+      } else {
+        info = (<div className="info">
+            <h2>Няма патэрну, таму вы бачыце агульную статыстыку</h2>
+            <p>Усяго — {totalCount} гарадоў і вёсак.</p>
+          </div>)
+      }
+
+    }
+
     return (
-      <div className="map-tile">
-        <div className="info">{this.state.info}</div>
-        <svg width="600" height="600">
+      <section className="map">
+        <svg width="625" height="500">
           <g>
             {dots}
+            {activeRegion}
           </g>
         </svg>
-      </div>
+        {info}
+      </section>
     );
   }
 }
+
 export default Map;

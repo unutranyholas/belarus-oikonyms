@@ -64,6 +64,7 @@
     "postcss-loader": "^0.8.0"
   },
   "dependencies": {
+    "avalanche-css": "^1.0.0",
     "core-js": "^1.2.6",
     "d3-geo": "0.0.0",
     "d3-hexbin": "^0.1.0",

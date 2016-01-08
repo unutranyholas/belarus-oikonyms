@@ -1,8 +1,23 @@
 path:hover {
   stroke-width: 1px;
   stroke: #000;
+  cursor: pointer;
+}
+
+.active path{
+  fill: none;
+  stroke-width: 2px;
+  stroke: #FF00AC
+}
+
+.active line {
+  stroke-width: 2px;
+  stroke: #FF00AC;
+  shape-rendering: crispEdges;
 }
 
 .tooltip {
   position: absolute;
 }
+
+
