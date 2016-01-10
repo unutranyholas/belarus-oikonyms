@@ -73,11 +73,11 @@
     "d3-hexbin": "^0.1.0",
     "d3-request": "^0.2.5",
     "d3-scale": "^0.4.0",
-    "ilyabirman-likely": "^2.0.8",
     "lodash": "^3.10.1",
     "normalize.css": "^3.0.3",
     "react": "^0.14.0",
     "react-addons-test-utils": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "react-social": "^1.0.4"
   }
 }

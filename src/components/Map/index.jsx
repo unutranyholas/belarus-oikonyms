@@ -1,6 +1,5 @@
 import React from 'react';
 import d3_scale from 'd3-scale';
-import _ from 'lodash';
 const colorScalePer = d3_scale.viridis();
 const colorScaleCount = d3_scale.viridis();
 import './Map.css';
@@ -13,6 +12,7 @@ export default class Map extends React.Component {
       active: null
     };
     this.toggleActive = this.toggleActive.bind(this);
+    this.removeActive = this.removeActive.bind(this);
   }
   queryToRegexp(query) {
     const result = query.split('/').map(q => {
@@ -31,6 +31,11 @@ export default class Map extends React.Component {
       active: result
     })
   }
+  removeActive() {
+    this.setState({
+      active: null
+    })
+  }
   render() {
     const {data, lang, query, path} = this.props;
     const myRegexp = this.queryToRegexp(query);
@@ -40,7 +45,7 @@ export default class Map extends React.Component {
     let maxPercent = 0;
     let totalCount = 0;
     let maxCount = 0;
-    let active, activeRegion, info;
+    let active;
 
     data.forEach((x)=>{
       if (x.id === this.state.active) {active = x}
@@ -76,75 +81,144 @@ export default class Map extends React.Component {
       )
     });
 
-    if (this.props.query.replace(/-/g, '') !== '') {
+    const activeRegion = (active) ?
+      (<g className="active">
+        <path d={path} transform={`translate(${active.x}, ${active.y})`} onClick={this.toggleActive} title={active.id}/>
+        <line x1="0" x2="0" y1="5" y2="600" transform={`translate(${active.x}, ${active.y})`}/>
+      </g>) : null;
 
-      if (this.state.active !== null) {
-        activeRegion =
-          (<g className="active">
-            <path d={path} transform={`translate(${active.x}, ${active.y})`} onClick={this.toggleActive}
-                  title={active.id}/>
-            <line x1="0" x2="0" y1="5" y2="600" transform={`translate(${active.x}, ${active.y})`}/>
-          </g>);
+    const isQuerySet = (this.props.query.replace(/-/g, '') !== '') ? 'querySet' : 'queryEmpty';
+    const isHasResult = (totalCount !== 0) ? 'hasResult' : 'noResult';
+    const isSelected = (this.state.active) ? ((placenames[this.state.active].percentage !== '0') ? 'selectedHasRecords' : 'selectedNoRecords') : 'totalStats';
+    const cases = `${this.props.lang}-${isQuerySet}-${isHasResult}-${isSelected}`;
 
-        info = (placenames[this.state.active].percentage === '0') ?
-          (<div className="info"><h2>Тут няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong></h2>
-          </div>) :
-          (<div className="info"><h2>Тут {placenames[this.state.active].percentage}% населеных пунктаў утрымліваюць
-            патэрн <strong>{this.props.query}</strong></h2>
-            <ul>
-              {placenames[this.state.active].points.map((p, i) => {
-                return (<li key={i}>{p}</li>)
-              })}
-            </ul>
-          </div>);
-      } else {
-        info = (totalCount === 0) ?
-          (<div className="info"><h2>У Беларусі няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong>
-          </h2></div>) :
-          (<div className="info"><h2>Усяго {(totalCount / this.props.total * 100).toFixed(1)}% населеных пунктаў
-            утрымліваюць патэрн <strong>{this.props.query}</strong></h2>
+    let info = (<div>{cases}</div>);
+
+    switch (cases) {
+      case 'Bel-querySet-hasResult-totalStats':
+        info = (
+          <div>
+            <h2>Усяго {(totalCount / this.props.total * 100).toFixed(1)}% населеных пунктаў утрымліваюць патэрн&nbsp;<strong>{this.props.query}</strong></h2>
             <p>Калі дакладней, то {totalCount} з {this.props.total}.</p>
-          </div>)
-      }
-
-    } else {
-
-      if (this.state.active !== null) {
-        activeRegion =
-          (<g className="active">
-            <path d={path} transform={`translate(${active.x}, ${active.y})`} onClick={this.toggleActive}
-                  title={active.id}/>
-            <line x1="0" x2="0" y1="5" y2="600" transform={`translate(${active.x}, ${active.y})`}/>
-          </g>);
-
-        info = (placenames[this.state.active].percentage === '0') ?
-          (<div className="info"><h2>Тут няма населеных пунктаў з патэрнам <strong>{this.props.query}</strong></h2>
-          </div>) :
-          (<div className="info"><h2>Тут {placenames[this.state.active].points.length} населеных пунктаў</h2>
+          </div>
+        );
+        break;
+      case 'Bel-querySet-hasResult-selectedHasRecords':
+        info = (
+          <div>
+            <h2>Тут {placenames[this.state.active].percentage}% населеных пунктаў утрымліваюць патэрн&nbsp;<strong>{this.props.query}</strong></h2>
             <ul>
               {placenames[this.state.active].points.map((p, i) => {
                 return (<li key={i}>{p}</li>)
               })}
             </ul>
-          </div>);
-      } else {
-        info = (<div className="info">
+          </div>
+        );
+        break;
+      case 'Bel-querySet-hasResult-selectedNoRecords':
+      case 'Bel-querySet-noResult-selectedNoRecords':
+        info = (
+          <div>
+            <h2>Тут няма населеных пунктаў з патэрнам&nbsp;<strong>{this.props.query}</strong></h2>
+          </div>
+        );
+        break;
+      case 'Bel-queryEmpty-hasResult-totalStats':
+        info = (
+          <div>
             <h2>Няма патэрну, таму вы бачыце агульную статыстыку</h2>
-            <p>Усяго — {totalCount} населеных пунктаў.</p>
-          </div>)
-      }
-
+            <p>Усяго — {totalCount} населеных пунктаў</p>
+          </div>
+        );
+        break;
+      case 'Bel-queryEmpty-hasResult-selectedHasRecords':
+        info = (
+          <div>
+            <h2>Тут {placenames[this.state.active].points.length} населеных пунктаў</h2>
+            <ul>
+              {placenames[this.state.active].points.map((p, i) => {
+                return (<li key={i}>{p}</li>)
+              })}
+            </ul>
+          </div>
+        );
+        break;
+      case 'Bel-querySet-noResult-totalStats':
+        info = (
+          <div>
+            <h2>У Беларусі няма населеных пунктаў з патэрнам&nbsp;<strong>{this.props.query}</strong></h2>
+          </div>
+        );
+        break;
+      case 'Eng-querySet-hasResult-totalStats':
+        info = (
+          <div>
+            <h2>A total of {(totalCount / this.props.total * 100).toFixed(1)}% cities and villages contain pattern&nbsp;<strong>{this.props.query}</strong></h2>
+            <p>More specifically, {totalCount} from {this.props.total}.</p>
+          </div>
+        );
+        break;
+      case 'Eng-querySet-hasResult-selectedHasRecords':
+        info = (
+          <div>
+            <h2>{placenames[this.state.active].percentage}% cities and villages contain pattern&nbsp;<strong>{this.props.query}</strong> here</h2>
+            <ul>
+              {placenames[this.state.active].points.map((p, i) => {
+                return (<li key={i}>{p}</li>)
+              })}
+            </ul>
+          </div>
+        );
+        break;
+      case 'Eng-querySet-hasResult-selectedNoRecords':
+      case 'Eng-querySet-noResult-selectedNoRecords':
+        info = (
+          <div>
+            <h2>There are no cities and villages containing the pattern&nbsp;<strong>{this.props.query}</strong> here</h2>
+          </div>
+        );
+        break;
+      case 'Eng-queryEmpty-hasResult-totalStats':
+        info = (
+          <div>
+            <h2>The pattern isn’t defined, so you see the summary</h2>
+            <p>There are {totalCount} cities and villages in total</p>
+          </div>
+        );
+        break;
+      case 'Eng-queryEmpty-hasResult-selectedHasRecords':
+        info = (
+          <div>
+            <h2>There are {placenames[this.state.active].points.length} cities and villages here</h2>
+              <ul>
+                {placenames[this.state.active].points.map((p, i) => {
+                  return (<li key={i}>{p}</li>)
+                })}
+              </ul>
+          </div>
+        );
+        break;
+      case 'Eng-querySet-noResult-totalStats':
+        info = (
+          <div>
+            <h2>There are no cities and villages containing the pattern&nbsp;<strong>{this.props.query} in Belarus</strong></h2>
+          </div>
+        );
+        break;
     }
 
     return (
       <section className="map">
-        <svg width="625" height="500">
+        <svg width="515" height="500" fill="transparent">
+          <rect x="0" y="0" width="625" height="500" onClick={this.removeActive} />
           <g>
             {dots}
             {activeRegion}
           </g>
         </svg>
-        {info}
+        <div className="info">
+          {info}
+        </div>
       </section>
     );
   }

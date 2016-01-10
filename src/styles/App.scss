@@ -5,13 +5,19 @@ a {
   cursor: pointer;
 }
 
+html {
+  height: 100%;
+}
 body {
   font: 16px/1.4 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 h1 {
   margin: 0;
-  padding: 60px 0;
+  padding: 60px 0 50px;
   font-size: 40px;
   line-height: 1;
 }
@@ -41,17 +47,26 @@ li {
 p {
   margin: 0 0 8px;
 }
+#app{
+  height: 100%;
+}
 
 .wrapper {
   max-width: 1280px;
-  padding: 0 40px;
+  padding: 0 30px;
   margin: 0 auto;
+  min-height: 100%;
+  position: relative;
+}
+
+article {
+  padding-bottom: 160px;
 }
 
 .lang {
   float: right;
   margin: 4px 0;
-  padding: 60px 0;
+  padding: 60px 0 50px;
 
   li {
     display: inline-block;
@@ -59,20 +74,12 @@ p {
     padding: 4px 16px 4px 8px;
 
     &:hover {
-      //background-color: #FDE725;
-      cursor: default;
-    }
-
-    a:hover {
-      cursor: default;
+      background-color: #FDE725;
     }
 
     &.selected {
       background-color: #FFF599;
-
-      &:hover {
-        //background-color: #FFF599;
-      }
+      font-weight: 600;
 
       a {
         cursor: default;
@@ -122,14 +129,16 @@ p {
   font-size: 18px;
   margin-top: 0px;
   display: inline-block;
-  margin-right: 8px;
+  margin-right: 12px;
 }
 
 
 
 .map {
   position: relative;
-  top: -20px;
+  top: -10px;
+  left: -30px;
+  text-align: center;
 
   h2 strong {
     background-color: #FFF599;
@@ -182,15 +191,61 @@ p {
   }
 }
 
-footer.grid {
-  padding-bottom: 40px;
+footer {
+  height: 120px;
+  position: absolute;
+  bottom: 0;
+  left: 30px;
+  right: 30px;
+  //width: 100%;
+
+  h3 {
+    font-size: 14px;
+  }
 
   ul {
     margin: 8px 0 24px;
+    font-size: 14px;
   }
 
   p {
-    font-size: 18px;
+    font-size: 14px;
     margin: 0 0 8px;
+  }
+}
+
+.likes {
+  padding-bottom: 30px;
+  button {
+    border: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #fff;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    margin: 0 8px 4px 0;
+    font-size: 14px;
+    padding: 3px 6px 3px 5px;
+
+    transition: background-color 0.2s ease-in;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+      transition: background-color 0.05s ease-in;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  svg {
+    fill: #fff;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: middle;
   }
 }
