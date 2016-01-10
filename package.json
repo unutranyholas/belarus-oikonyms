@@ -78,6 +78,7 @@
     "react": "^0.14.0",
     "react-addons-test-utils": "^0.14.0",
     "react-dom": "^0.14.0",
-    "react-social": "^1.0.4"
+    "react-social": "^1.0.4",
+    "topojson": "^1.6.19"
   }
 }

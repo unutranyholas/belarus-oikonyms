@@ -8,11 +8,21 @@ a {
 html {
   height: 100%;
 }
+
 body {
   font: 16px/1.4 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   height: 100%;
+
+}
+
+@media only screen and (min-width: 1280px) {
+  body {
+    background-image: url('/images/bg-map.svg');
+    background-repeat: no-repeat;
+    background-position: top center;
+  }
 }
 
 h1 {
@@ -247,5 +257,25 @@ footer {
   span {
     display: inline-block;
     vertical-align: middle;
+  }
+}
+
+#bg {
+  position: absolute;
+  z-index: -10;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.bg-map {
+  margin: 0 auto;
+  display: block;
+
+  path {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.05);
   }
 }
