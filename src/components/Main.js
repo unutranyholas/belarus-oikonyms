@@ -50,7 +50,7 @@ class AppComponent extends React.Component {
   }
 
   render() {
-    const url = 'http://trafimovi.ch/town-names';
+    const url = 'http://trafimovi.ch/city-and-village-names';
     switch(this.state.lang) {
       case 'Eng':
         return (
