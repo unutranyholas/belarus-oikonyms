@@ -89,7 +89,7 @@ class AppComponent extends React.Component {
                 </div>
                 <div className="5/16 1/1--handheld 2/3--lap 1/1--thumb grid__cell">
                   <aside className="help">
-                    <p>This map shows which morphological features are characteristic for different regions of Belarus. Set up patterns this way:</p>
+                    <p>This map shows which morphological features are characteristic for different regions of Belarus. The patterns are set up like this:</p>
                     <dl>
                       <dt><strong>-čy</strong></dt>
                       <dd>“čy” at the end of the name</dd>
@@ -102,9 +102,9 @@ class AppComponent extends React.Component {
                       <dt><strong>-čy/-šy</strong></dt>
                       <dd>“čy” or “šy” at the end of name</dd>
                     </dl>
-                    <p className="double">(Use <strong className="key"> ^ </strong> and <strong className="key"> ' </strong> keys to add these nice diacritical marks to the letters.)</p>
-                    <p>The color represents how often the name with the pattern comes across in this area: the darker, the more.</p>
-                    <p>Click points on the map to see names of all cities and villages with the choosen pattern in selected area.</p>
+                    <p className="double">Use <strong className="key"> ^ </strong> and <strong className="key"> ' </strong> keys to add these nice diacritical marks to the letters.</p>
+                    <p>The color represents how often the name with the pattern comes across in this area: the darker, the more ​there are​.</p>
+                    <p>Click points on the map to see names of all cities and villages with the ​chosen pattern in ​the selected area.</p>
                   </aside>
                 </div>
               </div>
@@ -200,6 +200,7 @@ class AppComponent extends React.Component {
                       <dt><strong>-чы/-шы</strong></dt>
                       <dd>&laquo;чы&raquo; альбо &laquo;шы&raquo; ў канцы назвы</dd>
                     </dl>
+                    <p className="double">Літары <strong className="key">щ</strong>, <strong className="key">и</strong> аўтаматычна пераўтвараюцца<br /> ў <strong className="key">ў</strong>, <strong className="key">і</strong>.</p>
                     <p>Па колеры можна ўбачыць, ці часта назва з такім патэрнам сустракаецца на гэтай тэрыторыі: чым цямнейшы
                       колер, тым часцей сустракаецца.</p>
                     <p>Клікайце кропкі на мапе, каб убачыць назвы ўсіх населеных пунктаў з абраным патэрнам на азначанай тэрыторыі.</p>
