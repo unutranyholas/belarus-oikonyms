@@ -200,7 +200,7 @@ class AppComponent extends React.Component {
                       <dt><strong>-чы/-шы</strong></dt>
                       <dd>&laquo;чы&raquo; альбо &laquo;шы&raquo; ў канцы назвы</dd>
                     </dl>
-                    <p className="double">Літары <strong className="key">щ</strong>, <strong className="key">и</strong> аўтаматычна пераўтвараюцца<br /> ў <strong className="key">ў</strong>, <strong className="key">і</strong>.</p>
+                    <p className="double">Літары <strong className="key">щ</strong>, <strong className="key">и</strong> аўтаматычна пераўтвараюцца <span style={{whiteSpace: 'nowrap'}}>ў <strong className="key">ў</strong>, <strong className="key">і</strong>.</span></p>
                     <p>Па колеры можна ўбачыць, ці часта назва з такім патэрнам сустракаецца на гэтай тэрыторыі: чым цямнейшы
                       колер, тым часцей сустракаецца.</p>
                     <p>Клікайце кропкі на мапе, каб убачыць назвы ўсіх населеных пунктаў з абраным патэрнам на азначанай тэрыторыі.</p>
