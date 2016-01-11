@@ -1,7 +1,7 @@
 var path = require('path');
 var port = 8000;
 var srcPath = path.join(__dirname, '/../src');
-var publicPath = '/town-names/assets/';
+var publicPath = '/city-and-village-names/assets/';
 
 var autoprefixer = require('autoprefixer');
 var magician = require('postcss-font-magician');
