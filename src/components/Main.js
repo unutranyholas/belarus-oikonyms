@@ -63,7 +63,7 @@ class AppComponent extends React.Component {
                 <div className="1/6 grid__cell">
                   <ul className="lang">
                     <li><a onClick={this.changeLang} data-lang="Bel"><img src={lang_bel} alt="The coat of arms of Belarus" height="24" />Бел</a></li>
-                    <li className="selected"><a data-lang="Eng"><img src={lang_eng} alt="the coat of arms of England" height="24" />Eng</a></li>
+                    <li className="selected"><a data-lang="Eng"><img src={lang_eng} alt="The coat of arms of England" height="24" />Eng</a></li>
                   </ul>
                 </div>
               </div>
@@ -102,6 +102,7 @@ class AppComponent extends React.Component {
                       <dt><strong>-čy/-šy</strong></dt>
                       <dd>“čy” or “šy” at the end of name</dd>
                     </dl>
+                    <p className="double">(Use <strong className="key"> ^ </strong> and <strong className="key"> ' </strong> keys to add these nice diacritical marks to the letters.)</p>
                     <p>The color represents how often the name with the pattern comes across in this area: the darker, the more.</p>
                     <p>Click points on the map to see names of all cities and villages with the choosen pattern in selected area.</p>
                   </aside>

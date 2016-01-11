@@ -56,6 +56,9 @@ li {
 
 p {
   margin: 0 0 8px;
+  &.double {
+    margin-bottom: 16px;
+  }
 }
 #app{
   height: 100%;
@@ -198,6 +201,15 @@ article {
     margin: 0 0 8px;
     padding: 0;
     vertical-align: top;
+  }
+
+  strong.key {
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    text-align: center;
   }
 }
 
